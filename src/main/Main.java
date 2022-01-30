@@ -5,31 +5,36 @@ import java.util.List;
 
 
 public class Main {
+
+    public static void main(String[] args){
+        boolean continu = true; //actually is continue
+        String url;
+        List<String> shortUrls = new ArrayList<>();
+        List<String> longUrls = new ArrayList<>();
+
+        while(continu){
+            url = readUrl();
+            if(url.contains(" store as ")){
+                addUrlWithSuggestion(url, shortUrls, longUrls);
+            }
+            else {
+                addUrl(url, shortUrls, longUrls);
+            }
+            continu = anotherUrl();
+        }
+    }
+
     public static String readUrl(){
         System.out.println("Please insert a URL");
-        String url = System.console().readLine();
-        return url;
+        return System.console().readLine();
     }
+    
     public static boolean anotherUrl(){
         System.out.println("Do you want to enter another URL? If not, please type 'no'");
         String answer = System.console().readLine();
-        if(answer.equals("no"))
-        {
-            return false;
-        }
-        else{
-            return true;
-        }
+        return !answer.equals("no");
     }
-    //returns -1 if String is not in List, otherwise the index of the String in the List
-    public static int isInList(List<String> list, String str){
-        for(int i=0; i<list.size(); i++){
-            if(list.get(i).equals(str)){
-                return i;
-            }
-        }
-        return -1;
-    }
+
     public static String createShortUrl(String longUrl, int dim){
         dim = dim + 1;
         if(longUrl.contains("https")){
@@ -40,59 +45,49 @@ public class Main {
         }
     }
 
-    public static void main(String[] args){
-        boolean continu = true; //should be continue
-        String url;
-        //List<UrlShortener> urlShorteners = new ArrayList<UrlShortener>();
-        List<String> shortUrls = new ArrayList<String>();
-        List<String> longUrls = new ArrayList<String>();
-        int check = -2;
-
-        while(continu){
-            url = readUrl();
-            if(url.contains(" store as ")){
-                String[] urls = url.split(" store as ");
-                check = isInList(shortUrls, urls[1]);
-                //System.out.println(urls[1]);
-                if(urls[1].contains("surl.ly")){
-                    check = 0;
-                }
-                if(check==-1){
-                    shortUrls.add(urls[1]);
-                    longUrls.add(urls[0]);
-                    System.out.println("stored your long URL as " + urls[1]);
-                }
-                else{
-                    System.out.println("Your suggested short Url is already used, do you want to use this URL instead?");
-                    int dim = shortUrls.size();
-                    String surl2 = createShortUrl(url, dim);
-                    System.out.println(surl2);
-                    System.out.println("'yes' or 'no'?");
-                    String answer2 = System.console().readLine();
-                    if(answer2.equals("yes")){
-                        shortUrls.add(surl2);
-                        longUrls.add(urls[0]);
-                    }
-                    else{
-                        System.out.println("Your URL was not stored, please proceed.");
-                    }
-
-                }
+    private static void addUrlWithSuggestion(String url, List<String> shortUrls, List<String> longUrls) {
+        String[] urls = url.split(" store as ");
+        String longUrl = urls[0];
+        String suggestedShortUrl = urls[1];
+        if(suggestionIsInvalid(suggestedShortUrl) || shortUrls.contains(suggestedShortUrl)){
+            System.out.println("Your suggested short Url is already used, do you want to use this URL instead?");
+            String createdShortUrl = createShortUrl(url, shortUrls.size());
+            System.out.println(createdShortUrl);
+            System.out.println("'yes' or 'no'?");
+            if(createdUrlIsAccepted()){
+                shortUrls.add(createdShortUrl);
+                longUrls.add(longUrl);
             }
-            else {
-                check = isInList(shortUrls, url);
-                if (check > -1) {
-                    System.out.println("Your long URL was:");
-                    System.out.println(longUrls.get(check));
-                } else {
-                    int dim = shortUrls.size();
-                    String surl = createShortUrl(url, dim);
-                    shortUrls.add(surl);
-                    longUrls.add(url);
-                    System.out.println("stored your long URL as " + surl);
-                }
+            else{
+                System.out.println("Your URL was not stored, please proceed.");
             }
-            continu = anotherUrl();
+        }
+        else{
+            shortUrls.add(suggestedShortUrl);
+            longUrls.add(longUrl);
+            System.out.println("stored your long URL as " + suggestedShortUrl);
         }
     }
+
+    private static void addUrl(String url, List<String> shortUrls, List<String> longUrls) {
+        if (shortUrls.contains(url)) {
+            System.out.println("Your long URL was:");
+            System.out.println(longUrls.get(shortUrls.indexOf(url)));
+        } else {
+            String surl = createShortUrl(url, shortUrls.size());
+            shortUrls.add(surl);
+            longUrls.add(url);
+            System.out.println("stored your long URL as " + surl);
+        }
+    }
+
+    private static boolean createdUrlIsAccepted() {
+        String answer = System.console().readLine();
+        return answer.equals("yes");
+    }
+
+    private static boolean suggestionIsInvalid(String url) {
+        return url.contains("surl.ly");
+    }
+
 }
