@@ -28,7 +28,7 @@ public class Main {
         System.out.println("Please insert a URL");
         return System.console().readLine();
     }
-    
+
     public static boolean anotherUrl(){
         System.out.println("Do you want to enter another URL? If not, please type 'no'");
         String answer = System.console().readLine();
@@ -45,7 +45,7 @@ public class Main {
         }
     }
 
-    private static void addUrlWithSuggestion(String url, List<String> shortUrls, List<String> longUrls) {
+    public static void addUrlWithSuggestion(String url, List<String> shortUrls, List<String> longUrls) {
         String[] urls = url.split(" store as ");
         String longUrl = urls[0];
         String suggestedShortUrl = urls[1];
@@ -69,7 +69,7 @@ public class Main {
         }
     }
 
-    private static void addUrl(String url, List<String> shortUrls, List<String> longUrls) {
+    public static void addUrl(String url, List<String> shortUrls, List<String> longUrls) {
         if (shortUrls.contains(url)) {
             System.out.println("Your long URL was:");
             System.out.println(longUrls.get(shortUrls.indexOf(url)));
