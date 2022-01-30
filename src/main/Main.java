@@ -1,7 +1,5 @@
 package main;
 
-import UrlShortener.UrlShortener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,7 @@ public class Main {
         System.out.println("Please insert a URL");
         String url = System.console().readLine();
         return url;
-    };
+    }
     public static boolean anotherUrl(){
         System.out.println("Do you want to enter another URL? If not, please type 'no'");
         String answer = System.console().readLine();
@@ -22,7 +20,7 @@ public class Main {
         else{
             return true;
         }
-    };
+    }
     //returns -1 if String is not in List, otherwise the index of the String in the List
     public static int isInList(List<String> list, String str){
         for(int i=0; i<list.size(); i++){
@@ -43,19 +41,19 @@ public class Main {
     }
 
     public static void main(String[] args){
-        boolean cont = true;
-        String url = "";
-        List<UrlShortener> urlShorteners = new ArrayList<UrlShortener>();
+        boolean continu = true; //should be continue
+        String url;
+        //List<UrlShortener> urlShorteners = new ArrayList<UrlShortener>();
         List<String> shortUrls = new ArrayList<String>();
         List<String> longUrls = new ArrayList<String>();
         int check = -2;
 
-        while(cont){
+        while(continu){
             url = readUrl();
             if(url.contains(" store as ")){
                 String[] urls = url.split(" store as ");
                 check = isInList(shortUrls, urls[1]);
-                System.out.println(urls[1]);
+                //System.out.println(urls[1]);
                 if(urls[1].contains("surl.ly")){
                     check = 0;
                 }
@@ -76,7 +74,7 @@ public class Main {
                         longUrls.add(urls[0]);
                     }
                     else{
-                        System.out.println("Please proceed.");
+                        System.out.println("Your URL was not stored, please proceed.");
                     }
 
                 }
@@ -94,7 +92,7 @@ public class Main {
                     System.out.println("stored your long URL as " + surl);
                 }
             }
-            cont = anotherUrl();
+            continu = anotherUrl();
         }
     }
 }

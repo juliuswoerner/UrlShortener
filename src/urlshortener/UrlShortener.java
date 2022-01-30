@@ -1,4 +1,4 @@
-package UrlShortener;
+package urlshortener;
 
 public class UrlShortener {
 
@@ -25,12 +25,7 @@ public class UrlShortener {
     }
 
     public boolean compare(UrlShortener url2){
-        if(id == url2.id || (shortUrl.equals(url2.shortUrl) && longUrl.equals(url2.longUrl))){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (id == url2.id || (shortUrl.equals(url2.shortUrl) && longUrl.equals(url2.longUrl)));
     }
 
 
